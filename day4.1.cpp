@@ -18,30 +18,30 @@ The system's full passphrase list is available as your puzzle input. How many pa
 #include <sstream>
 
 int main ( int argc, char **argv ) {
-	std::string line;
+    std::string line;
 
-	int numValid = 0;
+    int numValid = 0;
 
-	while ( std::getline( std::cin, line) ) {
-		std::istringstream parser( line );
+    while ( std::getline( std::cin, line) ) {
+        std::istringstream parser( line );
 
-		std::set<std::string> m;
-		bool valid = true;
-		while ( parser ) {
-			std::string token;
+        std::set<std::string> m;
+        bool valid = true;
+        while ( parser ) {
+            std::string token;
 
-			parser >> token;
-			if ( parser ) {
-				if ( m.find( token ) == m.end() ) {
-					m.insert( token );
-				} else {
-					valid = false;
-				}
-			}
-		}
+            parser >> token;
+            if ( parser ) {
+                if ( m.find( token ) == m.end() ) {
+                    m.insert( token );
+                } else {
+                    valid = false;
+                }
+            }
+        }
 
-		if ( valid ) numValid ++;
-	}
+        if ( valid ) numValid ++;
+    }
 
-	std::cout << numValid << std::endl;
+    std::cout << numValid << std::endl;
 }

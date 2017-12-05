@@ -25,47 +25,47 @@ How many steps are required to carry the data from the square identified in your
 #include <iostream>
 
 int main() {
-	int input;
-	std::cin >> input;
+    int input;
+    std::cin >> input;
 
-	int xinc = 1, yinc = 0;
-	int right = 0, left = 0, top = 0, bottom = 0;
+    int xinc = 1, yinc = 0;
+    int right = 0, left = 0, top = 0, bottom = 0;
 
-	int x = 0, y = 0;
+    int x = 0, y = 0;
 
-	int i;
-	for ( i = 1; i < input; i++ ) {
-		std::cerr << "i:" << i
-		          << "(" << x << "," << y << ")"
-		          << " " << abs( x ) + abs( y )
-		          << std::endl;
+    int i;
+    for ( i = 1; i < input; i++ ) {
+        std::cerr << "i:" << i
+                  << "(" << x << "," << y << ")"
+                  << " " << abs( x ) + abs( y )
+                  << std::endl;
 
-		x += xinc;
-		y += yinc;
+        x += xinc;
+        y += yinc;
 
-		if ( x > right ) {
-			right ++;
-			xinc = 0;
-			yinc = 1;
-		} else if ( y > top ) {
-			top ++;
-			xinc = -1;
-			yinc = 0;
-		} else if ( x < left ) {
-			left --;
-			xinc = 0;
-			yinc = -1;
-		} else if ( y < bottom ) {
-			bottom --;
-			xinc = 1;
-			yinc = 0;
-		}
-	}
+        if ( x > right ) {
+            right ++;
+            xinc = 0;
+            yinc = 1;
+        } else if ( y > top ) {
+            top ++;
+            xinc = -1;
+            yinc = 0;
+        } else if ( x < left ) {
+            left --;
+            xinc = 0;
+            yinc = -1;
+        } else if ( y < bottom ) {
+            bottom --;
+            xinc = 1;
+            yinc = 0;
+        }
+    }
 
-	std::cerr << "i:" << i
-		  << "(" << x << "," << y << ")"
-		  << " " << abs( x ) + abs( y )
-		  << std::endl;
+    std::cerr << "i:" << i
+              << "(" << x << "," << y << ")"
+              << " " << abs( x ) + abs( y )
+              << std::endl;
 
-	std::cout << abs( x ) + abs( y ) << std::endl;
+    std::cout << abs( x ) + abs( y ) << std::endl;
 }

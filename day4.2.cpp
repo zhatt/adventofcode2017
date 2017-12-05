@@ -19,46 +19,33 @@ Under this new system policy, how many passphrases are valid?
 #include <sstream>
 #include <string>
 
-int score( std::string s ) {
-
-	int score = 0;
-
-	for ( std::string::const_iterator iter = s.begin();
-	      iter != s.end(); ++iter ) {
-		score += *iter;
-	}
-
-	return score;
-}
-
 int main ( int argc, char **argv ) {
-	std::string line;
+    std::string line;
 
-	int numValid = 0;
+    int numValid = 0;
 
-	while ( std::getline( std::cin, line) ) {
-		std::istringstream parser( line );
+    while ( std::getline( std::cin, line) ) {
+        std::istringstream parser( line );
 
-		// Length and score.
-		std::unordered_set<std::string> m;
-		bool valid = true;
-		while ( parser ) {
-			std::string token;
+        std::unordered_set<std::string> m;
+        bool valid = true;
+        while ( parser ) {
+            std::string token;
 
-			parser >> token;
-			if ( parser ) {
-				std::sort(token.begin(), token.end());
+            parser >> token;
+            if ( parser ) {
+                std::sort(token.begin(), token.end());
 
-				if ( m.find( token ) == m.end() ) {
-					m.insert( token );
-				} else {
-					valid = false;
-				}
-			}
-		}
+                if ( m.find( token ) == m.end() ) {
+                    m.insert( token );
+                } else {
+                    valid = false;
+                }
+            }
+        }
 
-		if ( valid ) numValid ++;
-	}
+        if ( valid ) numValid ++;
+    }
 
-	std::cout << numValid << std::endl;
+    std::cout << numValid << std::endl;
 }

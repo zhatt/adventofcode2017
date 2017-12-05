@@ -29,68 +29,68 @@ Your puzzle input is still 347991.
 #include <utility>
 
 int main() {
-	int input;
-	std::cin >> input;
+    int input;
+    std::cin >> input;
 
-	assert( std::cin );
+    assert( std::cin );
 
-	int xinc = 1, yinc = 0;
-	int right = 0, left = 0, top = 0, bottom = 0;
+    int xinc = 1, yinc = 0;
+    int right = 0, left = 0, top = 0, bottom = 0;
 
-	int x = 0, y = 0;
+    int x = 0, y = 0;
 
-	std::map<std::pair<int,int>,int> array;
+    std::map<std::pair<int,int>,int> array;
 
-	int i;
-	int val = 0;
-	for ( i = 1; val < input; i++ ) {
-		val = 0;
-		// Store value.
-		for ( int a = -1; a <= 1; a++ ) {
-			for ( int b = -1; b <= 1; b++ ) {
-				if ( a == 0 && b == 0 ) continue;
+    int i;
+    int val = 0;
+    for ( i = 1; val < input; i++ ) {
+        val = 0;
+        // Store value.
+        for ( int a = -1; a <= 1; a++ ) {
+            for ( int b = -1; b <= 1; b++ ) {
+                if ( a == 0 && b == 0 ) continue;
 
-				std::map<std::pair<int,int>,int>::const_iterator iter =
-					array.find( std::make_pair( x+a, y+b ) );
+                std::map<std::pair<int,int>,int>::const_iterator iter =
+                    array.find( std::make_pair( x+a, y+b ) );
 
-				if ( iter != array.end() ) {
-					val += iter->second;
-				}
-			}
-		}
+                if ( iter != array.end() ) {
+                    val += iter->second;
+                }
+            }
+        }
 
-		if ( val == 0 ) val = 1;
+        if ( val == 0 ) val = 1;
 
-		array.insert( std::make_pair(std::make_pair(x,y), val ) );
+        array.insert( std::make_pair(std::make_pair(x,y), val ) );
 
-		std::cerr << "i:" << i
-		          << "(" << x << "," << y << ")"
-		          << " " << abs( x ) + abs( y )
-		          << " " << val
-		          << std::endl;
+        std::cerr << "i:" << i
+                  << "(" << x << "," << y << ")"
+                  << " " << abs( x ) + abs( y )
+                  << " " << val
+                  << std::endl;
 
-		x += xinc;
-		y += yinc;
+        x += xinc;
+        y += yinc;
 
-		if ( x > right ) {
-			right ++;
-			xinc = 0;
-			yinc = 1;
-		} else if ( y > top ) {
-			top ++;
-			xinc = -1;
-			yinc = 0;
-		} else if ( x < left ) {
-			left --;
-			xinc = 0;
-			yinc = -1;
-		} else if ( y < bottom ) {
-			bottom --;
-			xinc = 1;
-			yinc = 0;
-		}
-	}
+        if ( x > right ) {
+            right ++;
+            xinc = 0;
+            yinc = 1;
+        } else if ( y > top ) {
+            top ++;
+            xinc = -1;
+            yinc = 0;
+        } else if ( x < left ) {
+            left --;
+            xinc = 0;
+            yinc = -1;
+        } else if ( y < bottom ) {
+            bottom --;
+            xinc = 1;
+            yinc = 0;
+        }
+    }
 
-	std::cout << val << std::endl;
+    std::cout << val << std::endl;
 
 }

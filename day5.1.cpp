@@ -32,26 +32,26 @@ How many steps does it take to reach the exit?
 
 int main() {
 
-	std::vector<int> data;
+    std::vector<int> data;
 
-	while ( std::cin ) {
+    while ( std::cin ) {
 
-		int x;
-		std::cin >> x;
-		if ( std::cin ) data.push_back( x );
-	}
+        int x;
+        std::cin >> x;
+        if ( std::cin ) data.push_back( x );
+    }
 
-	int current = 0;
-	int jumps = 0;
+    int current = 0;
+    int jumps = 0;
 
-	while ( current < (int) data.size() ) {
-		int oldcurrent = current;
-		current += data[current];
-		data[oldcurrent]++;
+    while ( current < (int) data.size() ) {
+        int oldcurrent = current;
+        current += data[current];
+        data[oldcurrent]++;
 
-		std::cout << "C:" << current << std::endl;
-		jumps++;
-	}
+        std::cout << "C:" << current << std::endl;
+        jumps++;
+    }
 
-	std::cout << jumps << std::endl;
+    std::cout << jumps << std::endl;
 }
