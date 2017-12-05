@@ -50,8 +50,7 @@ int main() {
             for ( int b = -1; b <= 1; b++ ) {
                 if ( a == 0 && b == 0 ) continue;
 
-                std::map<std::pair<int,int>,int>::const_iterator iter =
-                    array.find( std::make_pair( x+a, y+b ) );
+                auto iter = array.find( std::make_pair( x+a, y+b ) );
 
                 if ( iter != array.end() ) {
                     val += iter->second;
