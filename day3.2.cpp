@@ -28,9 +28,11 @@ Your puzzle input is still 347991.
 #include <map>
 #include <utility>
 
-int main( int argc, char *argv[] ) {
+int main() {
+	int input;
+	std::cin >> input;
 
-	assert( argc == 2 );
+	assert( std::cin );
 
 	int xinc = 1, yinc = 0;
 	int right = 0, left = 0, top = 0, bottom = 0;
@@ -41,7 +43,7 @@ int main( int argc, char *argv[] ) {
 
 	int i;
 	int val = 0;
-	for ( i = 1; val < atoi( argv[1] ); i++ ) {
+	for ( i = 1; val < input; i++ ) {
 		val = 0;
 		// Store value.
 		for ( int a = -1; a <= 1; a++ ) {
@@ -61,7 +63,7 @@ int main( int argc, char *argv[] ) {
 
 		array.insert( std::make_pair(std::make_pair(x,y), val ) );
 
-		std::cout << "i:" << i
+		std::cerr << "i:" << i
 		          << "(" << x << "," << y << ")"
 		          << " " << abs( x ) + abs( y )
 		          << " " << val
@@ -88,5 +90,7 @@ int main( int argc, char *argv[] ) {
 			yinc = 0;
 		}
 	}
+
+	std::cout << val << std::endl;
 
 }

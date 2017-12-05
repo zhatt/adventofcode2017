@@ -24,9 +24,9 @@ How many steps are required to carry the data from the square identified in your
 #include <cassert>
 #include <iostream>
 
-int main( int argc, char *argv[] ) {
-
-	assert( argc == 2 );
+int main() {
+	int input;
+	std::cin >> input;
 
 	int xinc = 1, yinc = 0;
 	int right = 0, left = 0, top = 0, bottom = 0;
@@ -34,8 +34,8 @@ int main( int argc, char *argv[] ) {
 	int x = 0, y = 0;
 
 	int i;
-	for ( i = 1; i < atoi( argv[1] ); i++ ) {
-		std::cout << "i:" << i
+	for ( i = 1; i < input; i++ ) {
+		std::cerr << "i:" << i
 		          << "(" << x << "," << y << ")"
 		          << " " << abs( x ) + abs( y )
 		          << std::endl;
@@ -62,8 +62,10 @@ int main( int argc, char *argv[] ) {
 		}
 	}
 
-	std::cout << "i:" << i
+	std::cerr << "i:" << i
 		  << "(" << x << "," << y << ")"
 		  << " " << abs( x ) + abs( y )
 		  << std::endl;
+
+	std::cout << abs( x ) + abs( y ) << std::endl;
 }
