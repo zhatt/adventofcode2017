@@ -21,17 +21,16 @@ For example:
 #include <vector>
 
 int main( int argc, char **argv ) {
-    assert( argc == 2 );
+    std::string s;
+    std::cin >> s;
+    assert( std::cin );
 
-    char* p = argv[1];
     std::vector<int> v;
 
-    while ( *p ) {
-        v.push_back( *p - '0' );
-        p++;
+    for ( std::string::const_iterator iter = s.begin(); iter != s.end();
+          ++iter ) {
+        v.push_back( *iter - '0' );
     }
-
-    assert( v.size() > 1 );
 
     int sum = 0;
     for ( size_t i = 0; i < v.size(); i++ ) {
