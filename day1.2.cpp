@@ -20,15 +20,14 @@ For example:
 #include <string>
 #include <vector>
 
-int main( int argc, char **argv ) {
+int main() {
     std::string s;
     std::cin >> s;
     assert( std::cin );
 
     std::vector<int> v;
 
-    for ( std::string::const_iterator iter = s.begin(); iter != s.end();
-          ++iter ) {
+    for ( auto iter = s.begin(); iter != s.end(); ++iter ) {
         v.push_back( *iter - '0' );
     }
 
