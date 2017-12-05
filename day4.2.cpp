@@ -60,5 +60,5 @@ int main ( int argc, char **argv ) {
 		if ( valid ) numValid ++;
 	}
 
-	std::cout << "Num valid: " << numValid << std::endl;
+	std::cout << numValid << std::endl;
 }
