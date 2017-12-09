@@ -76,3 +76,11 @@ runtest() {
 @test "day8.2" {
 	runtest "${BATS_TEST_DESCRIPTION}"
 }
+
+@test "day9.1" {
+	runtest "${BATS_TEST_DESCRIPTION}"
+}
+
+@test "day9.2" {
+	runtest "${BATS_TEST_DESCRIPTION}"
+}

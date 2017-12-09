@@ -9,7 +9,8 @@ all: \
 	day5.1 day5.2 \
 	day6.1 day6.2 \
 	day7.1 day7.2 \
-	day8.1 day8.2
+	day8.1 day8.2 \
+	day9.1 day9.2
 
 day1.1: day1.1.cpp
 day1.2: day1.2.cpp
@@ -27,3 +28,5 @@ day7.1: day7.1.cpp
 day7.2: day7.2.cpp
 day8.1: day8.1.cpp
 day8.2: day8.2.cpp
+day9.1: day9.1.cpp
+day9.2: day9.2.cpp
