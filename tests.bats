@@ -60,6 +60,15 @@ runtest() {
 	runtest "${BATS_TEST_DESCRIPTION}"
 }
 
+@test "day7.1" {
+	runtest "${BATS_TEST_DESCRIPTION}"
+}
+
+@test "day7.2" {
+	skip
+	runtest "${BATS_TEST_DESCRIPTION}"
+}
+
 @test "day8.1" {
 	runtest "${BATS_TEST_DESCRIPTION}"
 }
