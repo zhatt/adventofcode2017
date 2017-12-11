@@ -29,9 +29,19 @@ se,sw,se,sw,sw is 3 steps away (s,s,sw).
 #include <cassert>
 #include <complex>
 #include <iostream>
+#include <map>
 #include <sstream>
 
 using namespace std;
+
+static const map<string,complex<int> > offsets {
+    {"n",  {  0,  2 } },
+    {"ne", {  1,  1 } },
+    {"se", {  1, -1 } },
+    {"s",  {  0, -2 } },
+    {"sw", { -1, -1 } },
+    {"nw", { -1,  1 } },
+};
 
 int main() {
     string input;
@@ -41,8 +51,7 @@ int main() {
 
     istringstream parser( input );
 
-    int x = 0;
-    int y = 0;
+    complex<int> location { 0, 0 };
 
     while ( parser) {
         string command;
@@ -50,26 +59,11 @@ int main() {
         parser >> command;
         if ( !parser ) break;
 
-        if ( command == "n" ) {
-            x += 2;
-        } else if ( command == "ne" ) {
-            x += 1;
-            y += 1;
-        } else if ( command == "se" ) {
-            x += 1;
-            y -= 1;
-        } else if ( command == "s" ) {
-            y -= 2;
-        } else if ( command == "sw" ) {
-            x -= 1;
-            y -= 1;
-        } else if ( command == "nw" ) {
-            x += 1;
-            y -= 1;
-        } else {
-            assert( !"Unknown direction" );
-        }
+        const auto offset = offsets.find( command );
+        assert( offset != offsets.end() );
+
+        location += offset->second;
     }
 
-    cout << abs( x + y ) / 2 << endl;
+    cout << abs ( location.real() + location.imag() ) / 2 << endl;
 }
