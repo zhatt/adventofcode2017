@@ -128,3 +128,11 @@ day10_2_stdin_run() {
 	runtest "${BATS_TEST_DESCRIPTION}"
 }
 
+@test "day12.1" {
+	runtest "${BATS_TEST_DESCRIPTION}"
+}
+
+@test "day12.2" {
+	runtest "${BATS_TEST_DESCRIPTION}"
+}
+
