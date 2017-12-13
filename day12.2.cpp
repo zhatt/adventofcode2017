@@ -17,10 +17,11 @@ How many groups are there in total?
 #include "graph.h"
 
 using namespace std;
- 
+
 int main()
 {
-    Graph g;
+    Graph<int> g;
+
     set<int> programs;
 
     string line;

@@ -43,7 +43,7 @@ using namespace std;
 
 int main()
 {
-    Graph g;
+    Graph<int> g;
     set<int> programs;
 
     string line;

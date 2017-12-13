@@ -36,7 +36,8 @@ day10.1: day10.1.cpp
 day10.2: day10.2.cpp
 day11.1: day11.1.cpp
 day11.2: day11.2.cpp
-day12.1: day12.1.cpp graph.cpp
-day12.2: day12.2.cpp graph.cpp
+day12.1: day12.1.cpp
+day12.2: day12.2.cpp
 
-graph.h : graph.cpp
+day12.1.cpp: graph.h
+day12.2.cpp: graph.h
