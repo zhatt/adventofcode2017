@@ -41,7 +41,6 @@ How many programs are in the group that contains program ID 0?
 
 using namespace std;
 
-// Driver program to test methods of graph class
 int main()
 {
     Graph g;
