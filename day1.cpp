@@ -20,6 +20,20 @@ For example:
 1111 produces 4 because each digit (all 1) matches the next.
 1234 produces 0 because no digit matches the next.
 91212129 produces 9 because the only digit that matches the next one is the last digit, 9.
+
+--- Part Two ---
+
+You notice a progress bar that jumps to 50% completion. Apparently, the door isn't yet satisfied, but it did emit a star as encouragement. The instructions change:
+
+Now, instead of considering the next digit, it wants you to consider the digit halfway around the circular list. That is, if your list contains 10 items, only include a digit in your sum if the digit 10/2 = 5 steps forward matches it. Fortunately, your list has an even number of elements.
+
+For example:
+
+1212 produces 6: the list contains 4 items, and all four digits match the digit 2 items ahead.
+1221 produces 0, because every comparison is between a 1 and a 2.
+123425 produces 4, because both 2s match each other, but no other digit has a match.
+123123 produces 12.
+12131415 produces 4.
 */
 
 #include <cassert>
@@ -27,7 +41,14 @@ For example:
 #include <string>
 #include <vector>
 
-int main() {
+using namespace std;
+
+int main( int argc, char* argv[] ) {
+
+    assert( argc == 2 );
+    assert( string( argv[1] ) == "-1" || string( argv[1] ) == "-2" );
+    const int part = ( string( argv[1] ) == "-1" ? 1 : 2 );
+
     std::string s;
     std::cin >> s;
     assert( std::cin );
@@ -38,15 +59,26 @@ int main() {
         v.push_back( *iter - '0' );
     }
 
-    int prev = *(v.end()-1);
     int sum = 0;
-    for ( auto iter = v.begin(); iter != v.end(); ++iter ) {
 
-        if ( *iter == prev ) {
-            sum += *iter;
+    if ( part == 1 ) {
+        int prev = *(v.end()-1);
+        for ( auto iter = v.begin(); iter != v.end(); ++iter ) {
+
+            if ( *iter == prev ) {
+                sum += *iter;
+            }
+
+            prev = *iter;
         }
+    } else {
+        for ( size_t i = 0; i < v.size(); i++ ) {
+            size_t i2 = ( i + (v.size() / 2 ) ) % v.size();
 
-        prev = *iter;
+            if ( v[i] == v[i2] ) {
+                sum += v[i];
+            }
+        }
     }
 
     std::cout << sum << std::endl;

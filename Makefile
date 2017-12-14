@@ -1,8 +1,7 @@
 
 CXXFLAGS=-Wall -Werror -g
-
-all: \
-	day1.1 day1.2 \
+PROGS= \
+	day1 \
 	day2.1 day2.2 \
 	day3.1 day3.2 \
 	day4.1 day4.2 \
@@ -13,10 +12,15 @@ all: \
 	day9.1 day9.2 \
 	day10.1 day10.2 \
 	day11.1 day11.2 \
-	day12.1 day12.2
+	day12.1 day12.2 \
+	day13.1 day13.2 \
 
-day1.1: day1.1.cpp
-day1.2: day1.2.cpp
+all: ${PROGS}
+
+clean:
+	rm ${PROGS}
+
+day1: day1.cpp
 day2.1: day2.1.cpp
 day2.2: day2.2.cpp
 day3.1: day3.1.cpp
@@ -38,6 +42,8 @@ day11.1: day11.1.cpp
 day11.2: day11.2.cpp
 day12.1: day12.1.cpp
 day12.2: day12.2.cpp
+day13.1: day13.1.cpp
+day13.2: day13.2.cpp
 
 day12.1.cpp: graph.h
 day12.2.cpp: graph.h
