@@ -2,7 +2,7 @@
 CXXFLAGS=-Wall -Werror -g
 PROGS= \
 	day1 \
-	day2.1 day2.2 \
+	day2 \
 	day3.1 day3.2 \
 	day4.1 day4.2 \
 	day5.1 day5.2 \
@@ -21,8 +21,7 @@ clean:
 	rm ${PROGS}
 
 day1: day1.cpp
-day2.1: day2.1.cpp
-day2.2: day2.2.cpp
+day2: day2.cpp
 day3.1: day3.1.cpp
 day3.2: day3.2.cpp
 day4.1: day4.1.cpp
