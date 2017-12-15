@@ -9,7 +9,7 @@ run_stdin() {
 	shift
 	local prog="$1"
 	shift
-	echo "$stdin" | "$BATS_TEST_DIRNAME/$prog" "$@" 2>/dev/null
+	echo -ne "$stdin" | "$BATS_TEST_DIRNAME/$prog" "$@" 2>/dev/null
 }
 
 runtest.old() {
@@ -35,25 +35,29 @@ runtest() {
 }
 
 @test "day1.1.1" {
-	run run_stdin '1122' day1 -1
+	local input='1122\n'
+	run run_stdin "$input" day1 -1
 	[[ $status -eq 0 ]]
 	[[ $output == '3' ]]
 }
 
 @test "day1.1.2" {
-	run run_stdin '1111' day1 -1
+	local input='1111\n'
+	run run_stdin "$input" day1 -1
 	[[ $status -eq 0 ]]
 	[[ $output == '4' ]]
 }
 
 @test "day1.1.3" {
-	run run_stdin '1234' day1 -1
+	local input='1234\n'
+	run run_stdin "$input" day1 -1
 	[[ $status -eq 0 ]]
 	[[ $output == '0' ]]
 }
 
 @test "day1.1.4" {
-	run run_stdin '91212129' day1 -1
+	local input='91212129\n'
+	run run_stdin "$input" day1 -1
 	[[ $status -eq 0 ]]
 	[[ $output == '9' ]]
 }
@@ -63,41 +67,68 @@ runtest() {
 }
 
 @test "day1.2.1" {
-	run run_stdin '1212' day1 -2
+	local input='1212\n'
+	run run_stdin "$input" day1 -2
 	[[ $status -eq 0 ]]
 	[[ $output == '6' ]]
 }
 
 @test "day1.2.2" {
-	run run_stdin '1221' day1 -2
+	local input='1221\n'
+	run run_stdin "$input" day1 -2
 	[[ $status -eq 0 ]]
 	[[ $output == '0' ]]
 }
 
 @test "day1.2.3" {
-	run run_stdin '123425' day1 -2
+	local input='123425\n'
+	run run_stdin "$input" day1 -2
 	[[ $status -eq 0 ]]
 	[[ $output == '4' ]]
 }
 
 @test "day1.2.4" {
-	run run_stdin '123123' day1 -2
+	local input='123123\n'
+	run run_stdin "$input" day1 -2
 	[[ $status -eq 0 ]]
 	[[ $output == '12' ]]
 }
 
 @test "day1.2.5" {
-	run run_stdin '12131415' day1 -2
+	local input='12131415\n'
+	run run_stdin "$input" day1 -2
 	[[ $status -eq 0 ]]
 	[[ $output == '4' ]]
 }
 
 @test "day2.1" {
-	runtest.old "${BATS_TEST_DESCRIPTION}"
+	runtest "${BATS_TEST_DESCRIPTION}"
+}
+
+@test "day2.1.1" {
+	local input
+	input+='5 1 9 5\n'
+	input+='7 5 3\n'
+	input+='2 4 6 8\n'
+
+	run run_stdin "$input" day2 -1
+	[[ $status -eq 0 ]]
+	[[ $output == '18' ]]
 }
 
 @test "day2.2" {
-	runtest.old "${BATS_TEST_DESCRIPTION}"
+	runtest "${BATS_TEST_DESCRIPTION}"
+}
+
+@test "day2.2.1" {
+	local input
+	input+='5 9 2 8\n'
+	input+='9 4 7 3\n'
+	input+='3 8 6 5\n'
+
+	run run_stdin "$input" day2 -2
+	[[ $status -eq 0 ]]
+	[[ $output == '9' ]]
 }
 
 @test "day3.1" {
@@ -165,25 +196,29 @@ runtest() {
 }
 
 @test "day10.2.1" {
-	run run_stdin '' day10.2
+	local input='\n'
+	run run_stdin "$input" day10.2
 	[[ $status -eq 0 ]]
 	[[ $output == 'a2582a3a0e66e6e86e3812dcb672a272' ]]
 }
 
 @test "day10.2.2" {
-	run run_stdin 'AoC 2017' day10.2
+	local input='AoC 2017\n'
+	run run_stdin "$input" day10.2
 	[[ $status -eq 0 ]]
 	[[ $output == '33efeb34ea91902bb2f59c9920caa6cd' ]]
 }
 
 @test "day10.2.3" {
-	run run_stdin '1,2,3' day10.2
+	local input='1,2,3\n'
+	run run_stdin "$input" day10.2
 	[[ $status -eq 0 ]]
 	[[ $output == '3efbe78a8d82f29979031a4aa0b16a9d' ]]
 }
 
 @test "day10.2.4" {
-	run run_stdin '1,2,4' day10.2
+	input='1,2,4\n'
+	run run_stdin "$input" day10.2
 	[[ $status -eq 0 ]]
 	[[ $output == '63960835bcdc130f0b66d7ff4f6a5a8e' ]]
 }
