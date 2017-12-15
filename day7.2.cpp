@@ -130,8 +130,8 @@ class Programs {
 
         assert( weights.size() > 1 );
 
-        int wrongWeight;
-        int rightWeight;
+        int wrongWeight = 0;
+        int rightWeight = 0;
 
         for ( auto w : weights ) {
             if ( w.second == 1 ) {
