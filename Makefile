@@ -1,5 +1,5 @@
 
-CXXFLAGS=-Wall -Werror -g
+CXXFLAGS=-Wall -Werror -Og -g
 PROGS= \
 	day1 \
 	day2 \
