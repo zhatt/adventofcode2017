@@ -79,27 +79,24 @@ numbers in the list?
 #include <iterator>
 #include <locale>
 #include <numeric>
+#include <sstream>
 #include <vector>
 
 const size_t hashSize = 256;
 
 using namespace std;
 
-struct comma_is_space : std::ctype<char> {
-    comma_is_space() : std::ctype<char>(get_table()) {}
-    static mask const* get_table() {
-        static mask rc[table_size];
-        rc[','] = std::ctype_base::space;
-        rc['\n'] = std::ctype_base::space;
-        return &rc[0];
-    }
-};
 int main() {
 
-    cin.imbue(locale(cin.getloc(), new comma_is_space));
+    string input;
+    getline( cin, input );
+    assert( cin );
+
+    replace( input.begin(), input.end(), ',', ' ');
+    istringstream inputStream( input );
 
     // Load token stream from cin.
-    vector<unsigned> cmds( (std::istream_iterator<int>(cin)),
+    vector<unsigned> cmds( (std::istream_iterator<int>( inputStream )),
                             std::istream_iterator<int>());
 
     vector<int> hash( hashSize * 2 );
