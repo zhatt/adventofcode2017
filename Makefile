@@ -17,22 +17,22 @@ PROGS += day11.1 day11.2
 PROGS += day12.1 day12.2
 PROGS += day13.1 day13.2
 
-TESTPROGS += day1-test
+TESTPROGS += day1-test day2-test
 
-SRCS += day1.cpp
-SRCS +=	main.cpp
-SRCS += test-day1.cpp
-SRCS +=	testmain.cpp
+# FIXME is this needed?
+#SRCS += day1.cpp
+#SRCS +=	main.cpp
+#SRCS +=	testmain.cpp
 
 all: ${PROGS} ${TESTPROGS}
 
-test: day1-test.out
+test: $(TESTPROGS:-test=-test.out)
 
 clean:
-	rm -f ${PROGS} ${TESTPROGS} *.o ${DEPDIR}/*
+	rm -f ${PROGS} ${TESTPROGS} *.o ${DEPDIR}/* *-test.out
 
 day1: day1.o main.o
-day2: day2.o
+day2: day2.o main.o
 day3.1: day3.1.cpp
 day3.2: day3.2.cpp
 day4.1: day4.1.cpp
@@ -59,9 +59,11 @@ day12.1.cpp: graph.h
 day12.2.cpp: graph.h
 
 day1-test: day1-test.o day1.o testmain.o -lgtest
+day2-test: day2-test.o day2.o testmain.o -lgtest
 
-day1-test.out: day1-test
-	./day1-test | tee day1-test.out
-
+%-test.out: %-test
+	set -o pipefail; \
+	"./$<" | tee "$@.tmp"; \
+	[[ $$? -eq 0 ]] && mv "$@.tmp" "$@" || exit 1
 
 include Makefile.inc

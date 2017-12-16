@@ -69,19 +69,17 @@ What is the sum of each row's result in your puzzle input?
 #include <string>
 #include <vector>
 
+#include "main.h"
+
 using namespace std;
 
-int main( int argc, char **argv ) {
-
-    assert( argc == 2 );
-    assert( string( argv[1] ) == "-1" || string( argv[1] ) == "-2" );
-    const int part = ( string( argv[1] ) == "-1" ? 1 : 2 );
+int mainfunc( istream& is, ostream& os, Part part ) {
 
     int csum1 = 0;
     int csum2 = 0;
 
     string line;
-    while ( getline( cin, line) ) {
+    while ( getline( is, line) ) {
 
         istringstream parser( line );
 
@@ -109,9 +107,11 @@ int main( int argc, char **argv ) {
         }
     }
 
-    if ( part == 1 ) {
-        cout << csum1 << endl;
+    if ( part == Part::PART1 ) {
+        os << csum1 << endl;
     } else {
-        cout << csum2 << endl;
+        os << csum2 << endl;
     }
+
+    return 0;
 }

@@ -30,36 +30,6 @@ runtest() {
 	[[ $output == "$(< $testname.output)" ]]
 }
 
-@test "day2.1" {
-	runtest "${BATS_TEST_DESCRIPTION}"
-}
-
-@test "day2.1.1" {
-	local input
-	input+='5 1 9 5\n'
-	input+='7 5 3\n'
-	input+='2 4 6 8\n'
-
-	run run_stdin "$input" day2 -1
-	[[ $status -eq 0 ]]
-	[[ $output == '18' ]]
-}
-
-@test "day2.2" {
-	runtest "${BATS_TEST_DESCRIPTION}"
-}
-
-@test "day2.2.1" {
-	local input
-	input+='5 9 2 8\n'
-	input+='9 4 7 3\n'
-	input+='3 8 6 5\n'
-
-	run run_stdin "$input" day2 -2
-	[[ $status -eq 0 ]]
-	[[ $output == '9' ]]
-}
-
 @test "day3.1" {
 	runtest.old "${BATS_TEST_DESCRIPTION}"
 }
