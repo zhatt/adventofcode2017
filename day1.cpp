@@ -41,17 +41,15 @@ For example:
 #include <string>
 #include <vector>
 
+#include "main.h"
+
 using namespace std;
 
-int main( int argc, char* argv[] ) {
-
-    assert( argc == 2 );
-    assert( string( argv[1] ) == "-1" || string( argv[1] ) == "-2" );
-    const int part = ( string( argv[1] ) == "-1" ? 1 : 2 );
+int mainfunc( istream& is, ostream& os, Part part ) {
 
     std::string s;
-    std::cin >> s;
-    assert( std::cin );
+    is >> s;
+    assert( is );
 
     std::vector<int> v;
 
@@ -61,7 +59,7 @@ int main( int argc, char* argv[] ) {
 
     int sum = 0;
 
-    if ( part == 1 ) {
+    if ( part == Part::PART1 ) {
         int prev = *(v.end()-1);
         for ( auto iter = v.begin(); iter != v.end(); ++iter ) {
 
@@ -81,5 +79,8 @@ int main( int argc, char* argv[] ) {
         }
     }
 
-    std::cout << sum << std::endl;
+    os << sum << std::endl;
+
+    return 0;
 }
+
