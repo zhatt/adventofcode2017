@@ -6,7 +6,7 @@ CXXFLAGS=-Wall -Werror -Og -g
 PROGS += day1
 PROGS += day2
 PROGS += day3
-PROGS += day4.1 day4.2
+PROGS += day4
 PROGS += day5.1 day5.2
 PROGS += day6.1 day6.2
 PROGS += day7.1 day7.2
@@ -17,7 +17,7 @@ PROGS += day11.1 day11.2
 PROGS += day12.1 day12.2
 #PROGS += day13.1 day13.2
 
-TESTPROGS += day1-test day2-test day3-test
+TESTPROGS += day1-test day2-test day3-test day4-test
 
 # FIXME is this needed?
 #SRCS += day1.cpp
@@ -34,9 +34,7 @@ clean:
 day1: day1.o main.o
 day2: day2.o main.o
 day3: day3.o main.o
-day3.2: day3.2.cpp
-day4.1: day4.1.cpp
-day4.2: day4.2.cpp
+day4: day4.o main.o
 day5.1: day5.1.cpp
 day5.2: day5.2.cpp
 day6.1: day6.1.cpp
@@ -61,6 +59,7 @@ day12.2.cpp: graph.h
 day1-test: day1-test.o day1.o testmain.o -lgtest
 day2-test: day2-test.o day2.o testmain.o -lgtest
 day3-test: day3-test.o day3.o testmain.o -lgtest
+day4-test: day4-test.o day4.o testmain.o -lgtest
 
 %-test.out: %-test
 	set -o pipefail; \
