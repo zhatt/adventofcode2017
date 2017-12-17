@@ -35,7 +35,6 @@ day5: day5.o main.o
 day6: day6.o main.o
 day7: day7.o main.o
 day8: day8.o main.o
-day8.2: day8.2.cpp
 day9.1: day9.1.cpp
 day10.1: day10.1.cpp
 day10.2: day10.2.cpp
