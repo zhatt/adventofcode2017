@@ -30,14 +30,6 @@ runtest() {
 	[[ $output == "$(< $testname.output)" ]]
 }
 
-@test "day5.1" {
-	runtest.old "${BATS_TEST_DESCRIPTION}"
-}
-
-@test "day5.2" {
-	runtest.old "${BATS_TEST_DESCRIPTION}"
-}
-
 @test "day6.1" {
 	runtest.old "${BATS_TEST_DESCRIPTION}"
 }

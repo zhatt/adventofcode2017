@@ -7,7 +7,7 @@ PROGS += day1
 PROGS += day2
 PROGS += day3
 PROGS += day4
-PROGS += day5.1 day5.2
+PROGS += day5
 PROGS += day6.1 day6.2
 PROGS += day7.1 day7.2
 PROGS += day8.1 day8.2
@@ -17,7 +17,7 @@ PROGS += day11.1 day11.2
 PROGS += day12.1 day12.2
 #PROGS += day13.1 day13.2
 
-TESTPROGS += day1-test day2-test day3-test day4-test
+TESTPROGS += day1-test day2-test day3-test day4-test day5-test
 
 # FIXME is this needed?
 #SRCS += day1.cpp
@@ -35,8 +35,7 @@ day1: day1.o main.o
 day2: day2.o main.o
 day3: day3.o main.o
 day4: day4.o main.o
-day5.1: day5.1.cpp
-day5.2: day5.2.cpp
+day5: day5.o main.o
 day6.1: day6.1.cpp
 day6.2: day6.2.cpp
 day7.1: day7.1.cpp
@@ -60,6 +59,7 @@ day1-test: day1-test.o day1.o testmain.o -lgtest
 day2-test: day2-test.o day2.o testmain.o -lgtest
 day3-test: day3-test.o day3.o testmain.o -lgtest
 day4-test: day4-test.o day4.o testmain.o -lgtest
+day5-test: day5-test.o day5.o testmain.o -lgtest
 
 %-test.out: %-test
 	set -o pipefail; \
