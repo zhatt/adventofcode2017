@@ -66,14 +66,6 @@ runtest() {
 	[[ $output == '63960835bcdc130f0b66d7ff4f6a5a8e' ]]
 }
 
-@test "day11.1" {
-	runtest.old "${BATS_TEST_DESCRIPTION}"
-}
-
-@test "day11.2" {
-	runtest.old "${BATS_TEST_DESCRIPTION}"
-}
-
 @test "day12.1" {
 	runtest.old "${BATS_TEST_DESCRIPTION}"
 }

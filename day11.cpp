@@ -23,6 +23,9 @@ ne,ne,ne is 3 steps away.
 ne,ne,sw,sw is 0 steps away (back where you started).
 ne,ne,s,s is 2 steps away (se,se).
 se,sw,se,sw,sw is 3 steps away (s,s,sw).
+
+--- Part Two ---
+How many steps away is the furthest he ever got from his starting position?
 */
 
 #include <algorithm>
@@ -31,6 +34,8 @@ se,sw,se,sw,sw is 3 steps away (s,s,sw).
 #include <iostream>
 #include <map>
 #include <sstream>
+
+#include "main.h"
 
 using namespace std;
 
@@ -43,15 +48,17 @@ static const map<string,complex<int> > offsets {
     {"nw", { -1,  1 } },
 };
 
-int main() {
+int mainfunc( istream& is, ostream& os, Part part ) {
     string input;
 
-    cin >> input;
+    is >> input;
     replace( input.begin(), input.end(), ',', ' ');
 
     istringstream parser( input );
 
     complex<int> location { 0, 0 };
+    int furthestDistance = 0;
+    int currentDistance = 0;
 
     while ( parser) {
         string command;
@@ -63,7 +70,16 @@ int main() {
         assert( offset != offsets.end() );
 
         location += offset->second;
+
+        currentDistance = ( abs( location.real() ) + abs( location.imag() ) ) / 2;
+        furthestDistance = max( furthestDistance, currentDistance );
     }
 
-    cout << abs ( location.real() + location.imag() ) / 2 << endl;
+    if ( part == Part::PART1 ) {
+        os << currentDistance << endl;
+    } else {
+        os << furthestDistance << endl;
+    }
+
+    return 0;
 }
