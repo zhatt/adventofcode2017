@@ -20,16 +20,6 @@ runtest.old() {
 	[[ $output == "$(< $testname.output)" ]]
 }
 
-runtest() {
-	local testname=$1
-	local day=${testname%%.*}
-	local part=${testname##*.}
-
-	run runcmd $BATS_TEST_DIRNAME/$day -$part < "$day.input"
-        [[ $status -eq 0 ]]
-	[[ $output == "$(< $testname.output)" ]]
-}
-
 @test "day10.1" {
 	runtest.old "${BATS_TEST_DESCRIPTION}"
 }
@@ -64,13 +54,5 @@ runtest() {
 	run run_stdin "$input" day10.2
 	[[ $status -eq 0 ]]
 	[[ $output == '63960835bcdc130f0b66d7ff4f6a5a8e' ]]
-}
-
-@test "day12.1" {
-	runtest.old "${BATS_TEST_DESCRIPTION}"
-}
-
-@test "day12.2" {
-	runtest.old "${BATS_TEST_DESCRIPTION}"
 }
 

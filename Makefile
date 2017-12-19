@@ -14,12 +14,12 @@ PROGS += day8
 PROGS += day9
 PROGS += day10.1 day10.2
 PROGS += day11
-PROGS += day12.1 day12.2
+PROGS += day12
 #PROGS += day13.1 day13.2
 
 TESTPROGS += day1-test day2-test day3-test day4-test day5-test
 TESTPROGS += day6-test day7-test day8-test day9-test
-TESTPROGS += day11-test
+TESTPROGS += day11-test day12-test
 
 all: ${PROGS} ${TESTPROGS}
 
@@ -40,13 +40,10 @@ day9: day9.o main.o
 day10.1: day10.1.cpp
 day10.2: day10.2.cpp
 day11: day11.o main.o
-day12.1: day12.1.cpp
+day12: day12.o main.o
 day12.2: day12.2.cpp
 day13.1: day13.1.cpp
 day13.2: day13.2.cpp
-
-day12.1.cpp: graph.h
-day12.2.cpp: graph.h
 
 day1-test: day1-test.o day1.o testmain.o -lgtest
 day2-test: day2-test.o day2.o testmain.o -lgtest
@@ -59,6 +56,7 @@ day8-test: day8-test.o day8.o testmain.o -lgtest
 day9-test: day9-test.o day9.o testmain.o -lgtest
 
 day11-test: day11-test.o day11.o testmain.o -lgtest
+day12-test: day12-test.o day12.o testmain.o -lgtest
 
 %-test.out: %-test
 	set -o pipefail; \
