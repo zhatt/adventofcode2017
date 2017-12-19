@@ -16,9 +16,7 @@ PROGS += day10
 PROGS += day11
 PROGS += day12
 
-TESTPROGS += day1-test day2-test day3-test day4-test day5-test
-TESTPROGS += day6-test day7-test day8-test day9-test day10-test
-TESTPROGS += day11-test day12-test
+TESTPROGS = ${PROGS:=-test}
 
 all: ${PROGS} ${TESTPROGS}
 
