@@ -139,20 +139,14 @@ Knot Hash of your puzzle input? Ignore any leading or trailing whitespace
 you might encounter.
 */
 
-#include <algorithm>
-#include <cassert>
-#include <functional>
 #include <iomanip>
 #include <iostream>
-#include <iterator>
-#include <locale>
-#include <numeric>
+#include <string>
 #include <sstream>
 #include <vector>
 
+#include "knothash.h"
 #include "main.h"
-
-const size_t hashSize = 256;
 
 using namespace std;
 
@@ -184,61 +178,13 @@ int mainfunc( istream& is, ostream& os, Part part ) {
                      std::istream_iterator<int>());
     } else {
         data.insert( data.end(), input.begin(), input.end() );
-
-        // Add standard suffix.
-        data.insert( data.end(), { 17, 31, 73, 47, 23 } );
     }
-
-    vector<uint8_t> hash( hashSize * 2 );
-    auto hashEnd = hash.begin() + hashSize;
-
-    iota( hash.begin(), hash.begin() + hashSize, 0 );
-    iota( hash.begin() + hashSize, hash.begin() + 2*hashSize, 0 );
-
-
-    unsigned skipSize = 0;
-    auto current = hash.begin();
-
-    unsigned numRounds = 64;
-    if ( part == Part::PART1 ) numRounds = 1;
-
-    for ( unsigned round = 0; round < numRounds; round++ ) {
-        for ( auto cmd : data ) {
-            assert( cmd <= hashSize );
-
-            auto currentEnd = current + cmd;
-            reverse( current, currentEnd );
-
-            if ( currentEnd > hashEnd ) {
-                copy( hashEnd, currentEnd, hash.begin() );
-            }
-
-            copy( hash.begin(), hashEnd, hashEnd );
-
-            current += skipSize++;
-            if ( skipSize >= hashSize ) skipSize -= hashSize;
-            if ( current >= hashEnd ) current -= hashSize;
-
-            current += cmd;
-            if ( current >= hashEnd ) current -= hashSize;
-
-            assert( current - hash.begin() < 256 );
-        }
-    }
-
-    hash.resize( hashSize ); 
-    vector<uint8_t> sparseHash( hashSize / 16 );
-
-    auto sparseIter = sparseHash.begin();
-    for ( auto hashIter = hash.begin(); hashIter <= hash.end(); hashIter += 16 ) {
-          *sparseIter++ = accumulate( hashIter, hashIter + 16, 0, bit_xor<uint8_t>() ); 
-    }
-
 
     if ( part == Part::PART1 ) {
+        vector<uint8_t> hash = knotHash( data, 1, false, false );
         os << hash[0] * hash[1] << endl;
     } else {
-        string output = makeHexString( sparseHash );
+        string output = makeHexString( knotHash( data ) );
         os << output << endl;
     }
 
