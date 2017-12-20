@@ -17,6 +17,7 @@ PROGS += day11
 PROGS += day12
 PROGS += day13
 PROGS += day14
+PROGS += day15
 
 TESTPROGS = ${PROGS:=-test}
 
@@ -41,6 +42,7 @@ day11: day11.o main.o
 day12: day12.o main.o
 day13: day13.o main.o
 day14: day14.o main.o
+day15: day15.o main.o
 
 day1-test: day1-test.o day1.o testmain.o -lgtest
 day2-test: day2-test.o day2.o testmain.o -lgtest
@@ -56,6 +58,7 @@ day11-test: day11-test.o day11.o testmain.o -lgtest
 day12-test: day12-test.o day12.o testmain.o -lgtest
 day13-test: day13-test.o day13.o testmain.o -lgtest
 day14-test: day14-test.o day14.o testmain.o -lgtest
+day15-test: day15-test.o day15.o testmain.o -lgtest
 
 %-test.out: %-test
 	set -o pipefail; \
