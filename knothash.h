@@ -52,7 +52,7 @@ std::vector<uint8_t> knotHash( const std::vector<uint8_t>& data,
         }
     }
 
-    hash.resize( hashSize ); 
+    hash.resize( hashSize );
 
     if ( reduce ) {
         std::vector<uint8_t> sparseHash( hashSize / 16 );
