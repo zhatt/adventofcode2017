@@ -111,8 +111,8 @@ int mainfunc( istream& is, ostream& os, Part part ) {
 
         for ( unsigned i = 0; i < hash.size(); i ++ ) {
             for ( unsigned bit = 0; bit < 8; bit ++ ) {
-                if ( ( 0x01 << bit ) & hash[i] ) {
-                    array.insert( { (7-i)*8 + bit, row } );
+                if ( ( 0x80 >> bit ) & hash[i] ) {
+                    array.insert( { i*8 + bit, row } );
                 }
             }
         }
