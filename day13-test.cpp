@@ -41,18 +41,3 @@ TEST_F( Day13Test, PuzzleInputPart2 ) {
 
     EXPECT_EQ( "3897604\n", os.str() );
 }
-/*
-TEST_F( Day13Test, Description2_1 ) {
-    stringstream is;
-    is << "0: 3\n";
-    is << "1: 2\n";
-    is << "4: 4\n";
-    is << "6: 4\n";
-
-    ostringstream os;
-
-    mainfunc( is, os, Part::PART2 );
-
-    EXPECT_EQ( "10\n", os.str() );
-}
-*/
