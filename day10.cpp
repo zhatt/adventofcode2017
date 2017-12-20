@@ -156,7 +156,7 @@ const size_t hashSize = 256;
 
 using namespace std;
 
-static std::string makeHexString( const vector<int>& v ) {
+static std::string makeHexString( const vector<uint8_t>& v ) {
     std::ostringstream hex;
     hex << std::hex << std::setfill('0');
 
@@ -189,7 +189,7 @@ int mainfunc( istream& is, ostream& os, Part part ) {
         data.insert( data.end(), { 17, 31, 73, 47, 23 } );
     }
 
-    vector<int> hash( hashSize * 2 );
+    vector<uint8_t> hash( hashSize * 2 );
     auto hashEnd = hash.begin() + hashSize;
 
     iota( hash.begin(), hash.begin() + hashSize, 0 );
@@ -227,11 +227,11 @@ int mainfunc( istream& is, ostream& os, Part part ) {
     }
 
     hash.resize( hashSize ); 
-    vector<int> sparseHash( hashSize / 16 );
+    vector<uint8_t> sparseHash( hashSize / 16 );
 
     auto sparseIter = sparseHash.begin();
     for ( auto hashIter = hash.begin(); hashIter <= hash.end(); hashIter += 16 ) {
-          *sparseIter++ = accumulate( hashIter, hashIter + 16, 0, bit_xor<int>() ); 
+          *sparseIter++ = accumulate( hashIter, hashIter + 16, 0, bit_xor<uint8_t>() ); 
     }
 
 
