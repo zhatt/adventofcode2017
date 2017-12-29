@@ -64,10 +64,66 @@ sound played is 4.
 What is the value of the recovered frequency (the value of the most
 recently played sound) the first time a rcv instruction is executed with a
 non-zero value?
+
+--- Part Two ---
+
+As you congratulate yourself for a job well done, you notice that the
+documentation has been on the back of the tablet this entire time. While
+you actually got most of the instructions correct, there are a few key
+differences. This assembly code isn't about sound at all - it's meant to be
+run twice at the same time.
+
+Each running copy of the program has its own set of registers and follows
+the code independently - in fact, the programs don't even necessarily run
+at the same speed. To coordinate, they use the send (snd) and receive (rcv)
+instructions:
+
+  - snd X sends the value of X to the other program. These values wait in
+    a queue until that program is ready to receive them. Each program has
+    its own message queue, so a program can never receive a message it
+    sent.
+
+  - rcv X receives the next value and stores it in register X. If no
+    values are in the queue, the program waits for a value to be sent to
+    it. Programs do not continue to the next instruction until they have
+    received a value. Values are received in the order they are sent.
+
+Each program also has its own program ID (one 0 and the other 1); the
+register p should begin with this value.
+
+For example:
+
+snd 1
+snd 2
+snd p
+rcv a
+rcv b
+rcv c
+rcv d
+
+Both programs begin by sending three values to the other. Program 0 sends
+1, 2, 0; program 1 sends 1, 2, 1. Then, each program receives a value (both
+1) and stores it in a, receives another value (both 2) and stores it in b,
+and then each receives the program ID of the other program (program 0
+receives 1; program 1 receives 0) and stores it in c. Each program now sees
+a different value in its own copy of register c.
+
+Finally, both programs try to rcv a fourth time, but no data is waiting for
+either of them, and they reach a deadlock. When this happens, both programs
+terminate.
+
+It should be noted that it would be equally valid for the programs to run
+at different speeds; for example, program 0 might have sent all three
+values and then stopped at the first rcv before program 1 executed even its
+first instruction.
+
+Once both of your programs have terminated (regardless of what caused them
+to do so), how many times did program 1 send a value?
 */
 
 #include <cassert>
 #include <iostream>
+#include <list>
 #include <map>
 #include <sstream>
 #include <string>
@@ -77,57 +133,82 @@ non-zero value?
 
 using namespace std;
 
-class nullbuf : public std::streambuf
-{
-public:
-  int overflow(int c) { return c; }
-};
-
-nullbuf null_buffer;
-std::ostream trace(&null_buffer);
-
-
 class Machine;
 
 struct MachineState {
+    const unsigned id;
     unsigned pc = 0;
     unsigned frequency;
+    unsigned sndCount;
+    bool waiting;
+    bool waitForMessages;
     bool recovered;
     map<string,int64_t> registers;
+    list<int64_t>& sendQ;
+    list<int64_t>& receiveQ;
 
-    MachineState() :
+    MachineState( unsigned idnum, list<int64_t>& sq, list<int64_t>& rq, bool wait ) :
+        id( idnum ),
         pc( 0 ),
         frequency( 0 ),
-        recovered( false)
+        sndCount( 0 ),
+        waiting( false ),
+        waitForMessages( wait ),
+        recovered( false ),
+        sendQ( sq ),
+        receiveQ( rq )
         {}
 };
 
 class Instruction {
-    string dreg_;
-    string sregim_;
+    unsigned numReg_;
+    string xregim_;
+    string yregim_;
 
     public:
-    Instruction( string dreg, string sregim ) :
-                 dreg_( dreg ), sregim_( sregim ) {}
+    Instruction() :
+                 numReg_( 0 ) {}
+
+    Instruction( string x ) :
+                 numReg_( 1 ), xregim_( x ) {}
+
+    Instruction( string x, string y ) :
+                 numReg_( 2 ), xregim_( x ), yregim_( y ) {}
 
     virtual void execute( MachineState& machine ) = 0;
 
-    string dreg() { return dreg_; }
-
-    int64_t rval( const map<string,int64_t>& registers ) {
-        istringstream parser( sregim_ );
+    private:
+    int64_t val( const string& v, const map<string,int64_t>& registers ) {
+        istringstream parser( v );
         int value;
 
         if ( parser >> value ) {
             return value;
         } else {
-            auto iter = registers.find( sregim_ );
+            auto iter = registers.find( v );
             if ( iter != registers.end() ) {
                 return iter->second;
             } else {
                 return 0;
             }
         }
+    }
+
+    public:
+    int64_t xval( const map<string,int64_t>& registers ) {
+        assert( numReg_ >= 1 );
+        return val( xregim_, registers );
+    }
+    
+
+    int64_t yval( const map<string,int64_t>& registers ) {
+        assert( numReg_ >= 2 );
+        return val( yregim_, registers );
+    }
+
+    string xregName() {
+        assert( numReg_ >= 1 );
+        return xregim_;
     }
 };
 
@@ -137,6 +218,11 @@ class Machine {
     vector<Instruction*> program_;
 
 public:
+    Machine ( unsigned id, list<int64_t>& sendQ, list<int64_t>& receiveQ,
+              bool wait ) :
+        state_( id, sendQ, receiveQ, wait ) {
+            state_.registers["p"] = id;
+        }
 
     void addInstruction( Instruction* instruction ) {
         program_.push_back( instruction );
@@ -152,28 +238,37 @@ public:
     unsigned frequency() {
         return state_.frequency;
     }
+
+    bool waiting() {
+        return state_.waiting;
+    }
+
+    unsigned sndCount() {
+        return state_.sndCount;
+    }
+
+    unsigned pc() {
+        return state_.pc;
+    }
 };
 
 class Add : public Instruction {
     public:
-    Add( string dreg, string sregim ) : Instruction( dreg, sregim ) {}
+    Add( string x, string y ) : Instruction( x, y ) {}
 
     virtual void execute( MachineState& state ) override {
-        long int result = state.registers[ dreg() ] + rval( state.registers );
-        trace << "Add: " << result << endl;
-        state.registers[ dreg() ] += rval( state.registers );
+        state.registers[ xregName() ] += yval( state.registers );
         state.pc ++;
     }
 };
 
 class Jgz : public Instruction {
     public:
-    Jgz( string dreg, string sregim ) : Instruction( dreg, sregim ) {}
+    Jgz( string x, string y ) : Instruction( x, y ) {}
 
     virtual void execute( MachineState& state ) override {
-        if ( state.registers[ dreg() ] > 0 ) {
-            trace << "Jump:" << rval( state.registers ) << endl;
-            state.pc += rval( state.registers );
+        if ( xval( state.registers ) > 0 ) {
+            state.pc += yval( state.registers );
         } else {
             state.pc ++;
         }
@@ -182,69 +277,93 @@ class Jgz : public Instruction {
 
 class Mod : public Instruction {
     public:
-    Mod( string dreg, string sregim ) : Instruction( dreg, sregim ) {}
+    Mod( string x, string y ) : Instruction( x, y ) {}
 
     virtual void execute( MachineState& state ) override {
-        long int result = state.registers[ dreg() ] % rval( state.registers );
-        trace << "Mod: " << result << endl;
-
-        state.registers[ dreg() ] %= rval( state.registers );
+        state.registers[ xregName() ] %= yval( state.registers );
         state.pc ++;
     }
 };
 
 class Mul : public Instruction {
     public:
-    Mul( string dreg, string sregim ) : Instruction( dreg, sregim ) {}
+    Mul( string x, string y ) : Instruction( x, y ) {}
 
     virtual void execute( MachineState& state ) override {
-        long int result = state.registers[ dreg() ] * rval( state.registers );
-        trace << "Mul: " << result << endl;
-
-        state.registers[ dreg() ] *= rval( state.registers );
+        state.registers[ xregName() ] *= yval( state.registers );
         state.pc ++;
     }
 };
 
 class Set : public Instruction {
     public:
-    Set( string dreg, string sregim ) : Instruction( dreg, sregim ) {}
+    Set( string x, string y ) : Instruction( x, y ) {}
 
     virtual void execute( MachineState& state ) override {
-        state.registers[ dreg() ] = rval( state.registers );
+        state.registers[ xregName() ] = yval( state.registers );
         state.pc ++;
     }
 };
 
 class Rcv : public Instruction {
     public:
-    Rcv( string sregim ) : Instruction( "", sregim ) {}
+    Rcv( string x ) : Instruction( x ) {}
 
     virtual void execute( MachineState& state ) override {
-        trace << "Recover:" << rval( state.registers ) << " " << state.frequency << endl;
-
-        if ( rval( state.registers ) ) {
+        // In part 1 the argument is a source.  Check its value.
+        if ( xval( state.registers ) ) {
             state.recovered = true;
         }
-        state.pc ++;
+        if ( state.receiveQ.size() ) {
+            int64_t message = state.receiveQ.front();
+            state.registers[ xregName() ] = message;
+            state.receiveQ.pop_front();
+            state.waiting = false;
+            state.pc ++;
+        } else {
+            if ( state.waitForMessages ) {
+                state.waiting = true;
+            } else {
+                state.pc++;
+            }
+        }
     }
 };
 
 class Snd : public Instruction {
     public:
-    Snd( string sregim ) : Instruction( "", sregim ) {}
+    Snd( string x ) : Instruction( x ) {}
 
     virtual void execute( MachineState& state ) override {
-        trace << "Play:" << rval( state.registers ) << endl;
-        state.frequency = rval( state.registers );
+        int64_t message = xval( state.registers );
+        state.frequency = message;
+        state.sendQ.push_back( message );
+        state.sndCount++;
         state.pc++;
     }
 };
 
+class Dmp : public Instruction {
+    ostream& os_;
+    public:
+    Dmp( ostream& os ) : Instruction(), os_(os) {}
+
+    virtual void execute( MachineState& state ) override {
+        os_ << state.id << ":pc=" << state.pc << "\n";
+
+        for ( const auto& val : state.registers ) {
+            os_ << state.id << ":" << val.first << "=" << val.second << "\n";
+        }
+
+        state.pc ++;
+    }
+};
 
 int mainfunc( istream& is, ostream& os, Part part ) {
 
-    Machine machine;
+    list<int64_t> q01, q10;
+    Machine machine0( 0, q01, q10, part == Part::PART1 ? false : true );
+    Machine machine1( 1, q10, q01, true );
 
     string line;
     while ( getline( is, line ) ) {
@@ -258,29 +377,50 @@ int mainfunc( istream& is, ostream& os, Part part ) {
         parser >> val2;
 
         if ( cmd == "snd" ) {
-            machine.addInstruction( new Snd( val1 ) );
+            machine0.addInstruction( new Snd( val1 ) );
+            machine1.addInstruction( new Snd( val1 ) );
         } else if ( cmd == "set" ) {
-            machine.addInstruction( new Set( val1, val2 ) );
+            machine0.addInstruction( new Set( val1, val2 ) );
+            machine1.addInstruction( new Set( val1, val2 ) );
         } else if ( cmd == "add" ) {
-            machine.addInstruction( new Add( val1, val2 ) );
+            machine0.addInstruction( new Add( val1, val2 ) );
+            machine1.addInstruction( new Add( val1, val2 ) );
         } else if ( cmd == "mul" ) {
-            machine.addInstruction( new Mul( val1, val2 ) );
+            machine0.addInstruction( new Mul( val1, val2 ) );
+            machine1.addInstruction( new Mul( val1, val2 ) );
         } else if ( cmd == "mod" ) {
-            machine.addInstruction( new Mod( val1, val2 ) );
+            machine0.addInstruction( new Mod( val1, val2 ) );
+            machine1.addInstruction( new Mod( val1, val2 ) );
         } else if ( cmd == "rcv" ) {
-            machine.addInstruction( new Rcv( val1 ) );
+            machine0.addInstruction( new Rcv( val1 ) );
+            machine1.addInstruction( new Rcv( val1 ) );
         } else if ( cmd == "jgz" ) {
-            machine.addInstruction( new Jgz( val1, val2 ) );
+            machine0.addInstruction( new Jgz( val1, val2 ) );
+            machine1.addInstruction( new Jgz( val1, val2 ) );
+        } else if ( cmd == "dmp" ) {
+            machine0.addInstruction( new Dmp( os ) );
+            machine1.addInstruction( new Dmp( os ) );
         } else {
             assert( !"Unknown instruction" );
         }
     }
 
-    while( ! machine.recovered() ) {
-        machine.execute();
-    }
 
-    os << machine.frequency() << endl;
+    if ( part == Part::PART1 ) {
+        while( ! machine0.recovered() ) {
+            machine0.execute();
+        }
+
+        os << machine0.frequency() << endl;
+
+    } else {
+        while( ! ( machine0.waiting() && machine1.waiting() ) ) {
+            machine0.execute();
+            machine1.execute();
+        }
+
+        os << machine1.sndCount() << endl;
+    }
 
     return 0;
 }
