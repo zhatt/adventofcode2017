@@ -5,13 +5,30 @@
 #include <string>
 #include <sstream>
 
-#include "main.h"
+#include "machine.h"
 
 using namespace std;
 
-class Day18Test : public ::testing::Test{};
+class MachineTest : public ::testing::Test {
+    protected:
 
-TEST_F( Day18Test, Dmp ) {
+    /*
+     * Simplified mainfunc similar to day 18 part 2.
+     */
+    void mainfunc( istream& is, ostream& os ) {
+
+        const Program program( is, os );
+        list<int64_t> q;
+
+        Machine machine( registersId0, q, q, program );
+
+        while( ! machine.waiting() ) {
+            machine.execute();
+        }
+    }
+};
+
+TEST_F( MachineTest, Dmp ) {
     stringstream is;
     stringstream r;
     ostringstream os;
@@ -21,16 +38,13 @@ TEST_F( Day18Test, Dmp ) {
 
     r << "0:pc=0\n";
     r << "0:p=0\n";
-    r << "1:pc=0\n";
-    r << "1:p=1\n";
-    r << "0\n";
 
-    mainfunc( is, os, Part::PART2 );
+    mainfunc( is, os );
 
     EXPECT_EQ( r.str(), os.str() );
 }
 
-TEST_F( Day18Test, SetIm ) {
+TEST_F( MachineTest, SetIm ) {
     stringstream is;
     stringstream r;
     ostringstream os;
@@ -45,18 +59,13 @@ TEST_F( Day18Test, SetIm ) {
     r << "3:a=1\n";
     r << "3:b=2\n";
     r << "3:p=3\n";
-    r << "3:pc=3\n";
-    r << "3:a=1\n";
-    r << "3:b=2\n";
-    r << "3:p=3\n";
-    r << "0\n";
 
-    mainfunc( is, os, Part::PART2 );
+    mainfunc( is, os );
 
     EXPECT_EQ( r.str(), os.str() );
 }
 
-TEST_F( Day18Test, Set ) {
+TEST_F( MachineTest, Set ) {
     stringstream is;
     stringstream r;
     ostringstream os;
@@ -75,20 +84,13 @@ TEST_F( Day18Test, Set ) {
     r << "0:c=2\n";
     r << "0:d=2\n";
     r << "0:p=0\n";
-    r << "1:pc=5\n";
-    r << "1:a=1\n";
-    r << "1:b=1\n";
-    r << "1:c=2\n";
-    r << "1:d=2\n";
-    r << "1:p=1\n";
-    r << "0\n";
 
-    mainfunc( is, os, Part::PART2 );
+    mainfunc( is, os );
 
     EXPECT_EQ( r.str(), os.str() );
 }
 
-TEST_F( Day18Test, SetNeg ) {
+TEST_F( MachineTest, SetNeg ) {
     stringstream is;
     stringstream r;
     ostringstream os;
@@ -106,20 +108,13 @@ TEST_F( Day18Test, SetNeg ) {
     r << "0:c=-1\n";
     r << "0:d=-2\n";
     r << "0:p=0\n";
-    r << "1:pc=4\n";
-    r << "1:a=-1\n";
-    r << "1:b=-2\n";
-    r << "1:c=-1\n";
-    r << "1:d=-2\n";
-    r << "1:p=1\n";
-    r << "0\n";
 
-    mainfunc( is, os, Part::PART2 );
+    mainfunc( is, os );
 
     EXPECT_EQ( r.str(), os.str() );
 }
 
-TEST_F( Day18Test, Add ) {
+TEST_F( MachineTest, Add ) {
     stringstream is;
     stringstream r;
     ostringstream os;
@@ -140,20 +135,13 @@ TEST_F( Day18Test, Add ) {
     r << "0:c=4\n";
     r << "0:d=11\n";
     r << "0:p=0\n";
-    r << "1:pc=7\n";
-    r << "1:a=1\n";
-    r << "1:b=1\n";
-    r << "1:c=4\n";
-    r << "1:d=11\n";
-    r << "1:p=1\n";
-    r << "0\n";
 
-    mainfunc( is, os, Part::PART2 );
+    mainfunc( is, os );
 
     EXPECT_EQ( r.str(), os.str() );
 }
 
-TEST_F( Day18Test, AddNeg ) {
+TEST_F( MachineTest, AddNeg ) {
     stringstream is;
     stringstream r;
     ostringstream os;
@@ -169,18 +157,62 @@ TEST_F( Day18Test, AddNeg ) {
     r << "0:a=-3\n";
     r << "0:b=0\n";
     r << "0:p=0\n";
-    r << "1:pc=4\n";
-    r << "1:a=-3\n";
-    r << "1:b=0\n";
-    r << "1:p=1\n";
-    r << "0\n";
 
-    mainfunc( is, os, Part::PART2 );
+    mainfunc( is, os );
 
     EXPECT_EQ( r.str(), os.str() );
 }
 
-TEST_F( Day18Test, Mul ) {
+TEST_F( MachineTest, Sub ) {
+    stringstream is;
+    stringstream r;
+    ostringstream os;
+
+    is << "sub a 1\n"; // a = -1
+    is << "sub b a\n"; // b = 1
+    is << "sub c 2\n"; // c = -2
+    is << "sub d c\n"; // d = 2
+    is << "sub d a\n"; // d = 3
+    is << "sub d 8\n"; // d = -5
+    is << "sub c c\n"; // c = 0
+    is << "dmp\n";
+    is << "rcv x\n";
+
+    r << "0:pc=7\n";
+    r << "0:a=-1\n";
+    r << "0:b=1\n";
+    r << "0:c=0\n";
+    r << "0:d=-5\n";
+    r << "0:p=0\n";
+
+    mainfunc( is, os );
+
+    EXPECT_EQ( r.str(), os.str() );
+}
+
+TEST_F( MachineTest, SubNeg ) {
+    stringstream is;
+    stringstream r;
+    ostringstream os;
+
+    is << "sub a 1\n";  // a = -1
+    is << "sub b -4\n"; // b = 4
+    is << "sub a b\n";  // a = -5
+    is << "sub b 4\n";  // b = 0
+    is << "dmp\n";
+    is << "rcv x\n";
+
+    r << "0:pc=4\n";
+    r << "0:a=-5\n";
+    r << "0:b=0\n";
+    r << "0:p=0\n";
+
+    mainfunc( is, os );
+
+    EXPECT_EQ( r.str(), os.str() );
+}
+
+TEST_F( MachineTest, Mul ) {
     stringstream is;
     stringstream r;
     ostringstream os;
@@ -205,21 +237,12 @@ TEST_F( Day18Test, Mul ) {
     r << "0:d=800\n";
     r << "0:p=0\n";
 
-    r << "1:pc=10\n";
-    r << "1:a=10\n";
-    r << "1:b=30\n";
-    r << "1:c=9\n";
-    r << "1:d=800\n";
-    r << "1:p=1\n";
-
-    r << "0\n";
-
-    mainfunc( is, os, Part::PART2 );
+    mainfunc( is, os );
 
     EXPECT_EQ( r.str(), os.str() );
 }
 
-TEST_F( Day18Test, MulNeg ) {
+TEST_F( MachineTest, MulNeg ) {
     stringstream is;
     stringstream r;
     ostringstream os;
@@ -239,20 +262,12 @@ TEST_F( Day18Test, MulNeg ) {
     r << "0:c=9\n";
     r << "0:p=0\n";
 
-    r << "1:pc=6\n";
-    r << "1:a=-10\n";
-    r << "1:b=-6\n";
-    r << "1:c=9\n";
-    r << "1:p=1\n";
-
-    r << "0\n";
-
-    mainfunc( is, os, Part::PART2 );
+    mainfunc( is, os );
 
     EXPECT_EQ( r.str(), os.str() );
 }
 
-TEST_F( Day18Test, Mod ) {
+TEST_F( MachineTest, Mod ) {
     stringstream is;
     stringstream r;
     ostringstream os;
@@ -269,19 +284,12 @@ TEST_F( Day18Test, Mod ) {
     r << "0:b=6\n";
     r << "0:p=0\n";
 
-    r << "1:pc=4\n";
-    r << "1:a=0\n";
-    r << "1:b=6\n";
-    r << "1:p=1\n";
-
-    r << "0\n";
-
-    mainfunc( is, os, Part::PART2 );
+    mainfunc( is, os );
 
     EXPECT_EQ( r.str(), os.str() );
 }
 
-TEST_F( Day18Test, ModNeg ) {
+TEST_F( MachineTest, ModNeg ) {
     stringstream is;
     stringstream r;
     ostringstream os;
@@ -301,20 +309,12 @@ TEST_F( Day18Test, ModNeg ) {
     r << "0:c=-6\n";
     r << "0:p=0\n";
 
-    r << "1:pc=6\n";
-    r << "1:a=0\n";
-    r << "1:b=-6\n";
-    r << "1:c=-6\n";
-    r << "1:p=1\n";
-
-    r << "0\n";
-
-    mainfunc( is, os, Part::PART2 );
+    mainfunc( is, os );
 
     EXPECT_EQ( r.str(), os.str() );
 }
 
-TEST_F( Day18Test, Snd1 ) {
+TEST_F( MachineTest, SndRcv1 ) {
     stringstream is;
     stringstream r;
     ostringstream os;
@@ -323,52 +323,23 @@ TEST_F( Day18Test, Snd1 ) {
     is << "snd 30\n";
     is << "snd 40\n";
     is << "rcv x\n";
-    is << "rcv x\n";
-    is << "rcv x\n";
+    is << "rcv y\n";
+    is << "rcv z\n";
     is << "dmp\n";
     is << "rcv x\n";
 
     r << "0:pc=6\n";
     r << "0:p=0\n";
-    r << "0:x=40\n";
+    r << "0:x=20\n";
+    r << "0:y=30\n";
+    r << "0:z=40\n";
 
-    r << "1:pc=6\n";
-    r << "1:p=1\n";
-    r << "1:x=40\n";
-
-    r << "3\n";
-
-    mainfunc( is, os, Part::PART2 );
+    mainfunc( is, os );
 
     EXPECT_EQ( r.str(), os.str() );
 }
 
-TEST_F( Day18Test, SndRcv1 ) {
-    stringstream is;
-    stringstream r;
-    ostringstream os;
-
-    is << "snd p\n";
-    is << "rcv x\n";
-    is << "dmp\n";
-    is << "rcv x\n";
-
-    r << "0:pc=2\n";
-    r << "0:p=0\n";
-    r << "0:x=1\n";
-
-    r << "1:pc=2\n";
-    r << "1:p=1\n";
-    r << "1:x=0\n";
-
-    r << "1\n";
-
-    mainfunc( is, os, Part::PART2 );
-
-    EXPECT_EQ( r.str(), os.str() );
-}
-
-TEST_F( Day18Test, Jgz1 ) {
+TEST_F( MachineTest, Jgz1 ) {
     stringstream is;
     stringstream r;
     ostringstream os;
@@ -384,18 +355,12 @@ TEST_F( Day18Test, Jgz1 ) {
     r << "0:a=2\n";
     r << "0:p=0\n";
 
-    r << "1:pc=4\n";
-    r << "1:a=2\n";
-    r << "1:p=1\n";
-
-    r << "0\n";
-
-    mainfunc( is, os, Part::PART2 );
+    mainfunc( is, os );
 
     EXPECT_EQ( r.str(), os.str() );
 }
 
-TEST_F( Day18Test, Jgz2 ) {
+TEST_F( MachineTest, Jgz2 ) {
     stringstream is;
     stringstream r;
     ostringstream os;
@@ -411,18 +376,12 @@ TEST_F( Day18Test, Jgz2 ) {
     r << "0:a=1\n";
     r << "0:p=0\n";
 
-    r << "1:pc=4\n";
-    r << "1:a=1\n";
-    r << "1:p=1\n";
-
-    r << "0\n";
-
-    mainfunc( is, os, Part::PART2 );
+    mainfunc( is, os );
 
     EXPECT_EQ( r.str(), os.str() );
 }
 
-TEST_F( Day18Test, Jgz3_negoffset ) {
+TEST_F( MachineTest, Jgz3_negoffset ) {
     stringstream is;
     stringstream r;
     ostringstream os;
@@ -440,70 +399,98 @@ TEST_F( Day18Test, Jgz3_negoffset ) {
     r << "0:a=5\n";
     r << "0:p=0\n";
 
-    r << "1:pc=1\n";
-    r << "1:a=5\n";
-    r << "1:p=1\n";
-
-    r << "0\n";
-
-    mainfunc( is, os, Part::PART2 );
+    mainfunc( is, os );
 
     EXPECT_EQ( r.str(), os.str() );
 }
 
-TEST_F( Day18Test, PuzzleInputPart1 ) {
-    ifstream is( "day18.input" );
+TEST_F( MachineTest, Jnz1 ) {
+    stringstream is;
+    stringstream r;
     ostringstream os;
 
-    mainfunc( is, os, Part::PART1 );
-
-    EXPECT_EQ( "3188\n", os.str() );
-}
-
-TEST_F( Day18Test, Description1_1 ) {
-    stringstream is;
-    is << "set a 1\n";
-    is << "add a 2\n";
-    is << "mul a a\n";
-    is << "mod a 5\n";
-    is << "snd a\n";
     is << "set a 0\n";
-    is << "rcv a\n";
-    is << "jgz a -1\n";
-    is << "set a 1\n";
-    is << "jgz a -2\n";
+    is << "jnz 1 2\n";  // taken
+    is << "add a 1\n";
+    is << "jnz 1 2\n";  // taken
+    is << "add a 1\n";
+    is << "dmp\n";
+    is << "rcv x\n";
 
-    ostringstream os;
+    r << "0:pc=5\n";
+    r << "0:a=0\n";
+    r << "0:p=0\n";
 
-    mainfunc( is, os, Part::PART1 );
+    mainfunc( is, os );
 
-    EXPECT_EQ( "4\n", os.str() );
+    EXPECT_EQ( r.str(), os.str() );
 }
 
-TEST_F( Day18Test, PuzzleInputPart2 ) {
-    ifstream is( "day18.input" );
-    ostringstream os;
-
-    mainfunc( is, os, Part::PART2 );
-
-    EXPECT_EQ( "7112\n", os.str() );
-}
-
-TEST_F( Day18Test, Description2_1 ) {
+TEST_F( MachineTest, Jnz2 ) {
     stringstream is;
-
-    is << "snd 1\n";
-    is << "snd 2\n";
-    is << "snd p\n";
-    is << "rcv a\n";
-    is << "rcv b\n";
-    is << "rcv c\n";
-    is << "rcv d\n";
-
+    stringstream r;
     ostringstream os;
 
-    mainfunc( is, os, Part::PART2 );
+    is << "set a 0\n";
+    is << "jnz 0 2\n";  // taken
+    is << "add a 1\n";
+    is << "jnz 0 2\n";  // taken
+    is << "add a 1\n";
+    is << "dmp\n";
+    is << "rcv x\n";
 
-    EXPECT_EQ( "3\n", os.str() );
+    r << "0:pc=5\n";
+    r << "0:a=2\n";
+    r << "0:p=0\n";
+
+    mainfunc( is, os );
+
+    EXPECT_EQ( r.str(), os.str() );
+}
+
+TEST_F( MachineTest, Jnz3 ) {
+    stringstream is;
+    stringstream r;
+    ostringstream os;
+
+    is << "set a 0\n";
+    is << "add a 1\n";
+    is << "set b a\n";
+    is << "sub b 10\n";
+    is << "jnz b -3\n"; // taken 10 times
+    is << "dmp\n";
+    is << "rcv x\n";
+
+    r << "0:pc=5\n";
+    r << "0:a=10\n";
+    r << "0:b=0\n";
+    r << "0:p=0\n";
+
+    mainfunc( is, os );
+
+    EXPECT_EQ( r.str(), os.str() );
+}
+
+TEST_F( MachineTest, Jnz4 ) {
+    stringstream is;
+    stringstream r;
+    ostringstream os;
+
+    is << "set a 0\n";
+    is << "set b 2\n";
+    is << "jnz 1 b\n";
+    is << "add a 1\n";
+    is << "add a 1\n";
+    is << "dmp\n";
+    is << "rcv x\n";
+
+    r << "0:pc=5\n";
+    r << "0:a=1\n";
+    r << "0:b=2\n";
+    r << "0:p=0\n";
+
+    mainfunc( is, os );
+
+    EXPECT_EQ( r.str(), os.str() );
 }
 

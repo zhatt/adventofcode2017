@@ -139,8 +139,9 @@ int mainfunc( istream& is, ostream& os, Part part ) {
     const Program program( is, os );
 
     list<int64_t> q01, q10;
-    Machine machine0( 0, q01, q10, program, part == Part::PART1 ? false : true );
-    Machine machine1( 1, q10, q01, program, true );
+    Machine machine0( registersId0, q01, q10, program,
+                      part == Part::PART1 ? false : true );
+    Machine machine1( registersId1, q10, q01, program, true );
 
     if ( part == Part::PART1 ) {
         while( ! machine0.recovered() ) {

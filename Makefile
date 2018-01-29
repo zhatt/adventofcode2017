@@ -25,8 +25,10 @@ PROGS += day19
 PROGS += day20
 PROGS += day21
 PROGS += day22
+PROGS += day23
 
 TESTPROGS = ${PROGS:=-test}
+TESTPROGS += machine-test
 
 all: ${PROGS} ${TESTPROGS}
 
@@ -57,6 +59,7 @@ day19: day19.o main.o
 day20: day20.o main.o
 day21: day21.o main.o
 day22: day22.o main.o
+day23: day23.o main.o
 
 day1-test: day1-test.o day1.o testmain.o -lgtest
 day2-test: day2-test.o day2.o testmain.o -lgtest
@@ -80,6 +83,8 @@ day19-test: day19-test.o day19.o testmain.o -lgtest
 day20-test: day20-test.o day20.o testmain.o -lgtest
 day21-test: day21-test.o day21.o testmain.o -lgtest
 day22-test: day22-test.o day22.o testmain.o -lgtest
+day23-test: day23-test.o day23.o testmain.o -lgtest
+machine-test: machine-test.o testmain.o -lgtest
 
 %-test.out: %-test
 	set -o pipefail; \

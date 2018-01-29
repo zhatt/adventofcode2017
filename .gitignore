@@ -8,3 +8,6 @@ day[0-9]-test
 day[0-9][0-9]-test
 
 day*-test.out
+
+machine-test
+machine-test.out
