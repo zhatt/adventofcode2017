@@ -259,7 +259,7 @@ class Cluster {
     enum class VirusType {
         REGULAR,
         EVOLVED
-    };   
+    };
 
     enum class NodeState {
         WEAKENED,
