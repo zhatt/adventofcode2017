@@ -1,7 +1,7 @@
 #ifndef MAIN_H
 #define MAIN_H
 
-#include <iostream>
+#include <iosfwd>
 
 enum class Part { PART1, PART2 };
 
