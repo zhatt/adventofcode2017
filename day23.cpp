@@ -104,7 +104,7 @@ int mainfunc( istream& is, ostream& os, Part part ) {
 
         int regH = 0;
 
-        for ( b = b; b <= c; b += 17 ) {
+        for ( ; b <= c; b += 17 ) {
             if ( ! isPrime(b) ) {
                 regH += 1;
             }
