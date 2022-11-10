@@ -57,7 +57,7 @@ std::vector<uint8_t> knotHash( const std::vector<uint8_t>& data,
         std::vector<uint8_t> sparseHash( hashSize / 16 );
 
         auto sparseIter = sparseHash.begin();
-        for ( auto hashIter = hash.begin(); hashIter <= hash.end();
+        for ( auto hashIter = hash.begin(); hashIter < hash.end();
               hashIter += 16 ) {
 
             *sparseIter++ = accumulate( hashIter, hashIter + 16, 0,
