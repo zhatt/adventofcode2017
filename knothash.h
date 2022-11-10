@@ -30,7 +30,6 @@ std::vector<uint8_t> knotHash( const std::vector<uint8_t>& data,
 
     for ( unsigned round = 0; round < numRounds; round++ ) {
         for ( auto cmd : boost::join( data, useSuffix ? suffix : nosuffix ) ) {
-            assert( cmd <= hashSize );
 
             auto currentEnd = current + cmd;
             reverse( current, currentEnd );
