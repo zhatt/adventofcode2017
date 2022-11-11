@@ -76,6 +76,8 @@ class Instruction {
     Instruction(  std::string x, std::string y ) :
                  numReg_( 2 ), xregim_( x ), yregim_( y ) {}
 
+    virtual ~Instruction() = default;
+
     virtual void execute( MachineState& machine ) = 0;
 
     private:
