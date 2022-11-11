@@ -11,3 +11,5 @@ day*-test.out
 
 machine-test
 machine-test.out
+
+builddir*

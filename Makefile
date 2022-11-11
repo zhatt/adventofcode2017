@@ -1,3 +1,4 @@
+$(error Use meson build)
 
 LDFLAGS = -lstdc++
 
