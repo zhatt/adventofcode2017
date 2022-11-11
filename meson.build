@@ -1,5 +1,5 @@
 project('adventofcode2017', 'cpp',
-        default_options : ['cpp_std=c++17'],
+        default_options : ['cpp_std=c++17', 'buildtype=debugoptimized'],
         )
 
 gtest_dep = dependency('gtest')
